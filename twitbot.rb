@@ -10,7 +10,7 @@ require 'twitter'
 require 'shorten'
 require 'botrss'
 require 'dispress'
-require 'sourcebuilder'
+require 'sourcehandler'
 
 if(ARGV.length != 2)
   raise " Usage: twitbot.rb [username] [password]"
@@ -43,8 +43,8 @@ br = BotRSS.new(["http://feeds.digg.com/digg/topic/politics/popular.rss","http:/
 
 sourceThread = Thread.new {
    puts "Source thread started #{Time.now}"         
-   extra_sleep_time = 0
-   
+   sh = SourceHandler.new("source.txt")
+      
    while(true)
       timeToSleep = ((1 + rand() * 3) * 3600).to_i
       dt = Time.now + timeToSleep
@@ -55,7 +55,10 @@ sourceThread = Thread.new {
       semaphore.synchronize {
         puts("Source got semaphore")
   	begin
-          SourceBuilder::build(30, "", "")    
+  	  30.times{|i|
+            sh.handle_source() 
+            sleep(1 + rand(3)) #flood twitter less
+          }
           puts "Source thread built source at #{Time.now}"		
         rescue
 	  puts("Problem with building source " + $!)
@@ -65,31 +68,6 @@ sourceThread = Thread.new {
    
    puts "Source thread made it out of the loop - uh oh? #{Time.now}"
 }
-
-trimThread = Thread.new{
-  puts "Source trim thread started #{Time.now}"         
-   
-  while(true)   
-    puts "Trim thread woke up at #{Time.now}"
-    semaphore.synchronize {
-      puts("Trim got semaphore")
-      begin
-        trimmed = SourceBuilder::trim_source("")  
-        did_not_trim = trimmed ? "" : "not "
-        puts "Source " + did_not_trim + "trimmed at #{Time.now}"		
-      rescue
- 	puts("Problem with trimming source. " + $!)
-      end
-    }
-    timeToSleep = ((4 + rand() * 4) * 3600).to_i
-    dt = Time.now + timeToSleep
-    puts "Trim thread sleeping until #{dt}"
-    sleep(timeToSleep);
-  end
-    
-  puts "Trim thread made it out of the loop - uh oh? #{Time.now}"
-}
-
 
 postThread = Thread.new {
    sourceFiles = ["source.txt"] #could also include '/public-domain/Shakespeare.complete.txt' and '/public-domain/Alice In Wonderland.txt'
