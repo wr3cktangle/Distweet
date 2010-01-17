@@ -1,3 +1,10 @@
+# botrss.rb
+#  A purpose built class for my distweet bot that randomly selects a 
+#   news story from a list of RSS feeds and then returns the Title
+#   and a URL to the story, shortened if necessary
+#  Credit to http://www.cozmixng.org/~rwiki/?cmd=view;name=RSS+Parser%3A%3ATutorial.en
+#   for the tutorial I used when creating this.
+
 require 'rss'
 require 'shorten'
 
