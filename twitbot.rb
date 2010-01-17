@@ -92,7 +92,7 @@ trimThread = Thread.new{
 
 
 postThread = Thread.new {
-   sourceFiles = ["source.txt"] #could also include 'Shakespeare.complete.txt' and Alice In Wonderland.txt'
+   sourceFiles = ["source.txt"] #could also include '/public-domain/Shakespeare.complete.txt' and '/public-domain/Alice In Wonderland.txt'
   
    puts "Post thread started #{Time.now}"
    if(rand(100) == 1)

@@ -204,6 +204,7 @@ if __FILE__ == $0
   puts "Reading source file..."
   $stdout.flush
   t1 = Time.now
+  #other sources: '/public-domain/Alice In Wonderland.txt' and '/public-domain/Shakespeare.complete.txt'
   st = Dispress::create_source_from_file("source.txt")
   t2 = Time.now
   line_count = st.count("\n").to_s
