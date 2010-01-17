@@ -46,7 +46,7 @@ sourceThread = Thread.new {
    extra_sleep_time = 0
    
    while(true)
-      timeToSleep = (1 + rand(3)) * 3600).to_i
+      timeToSleep = ((1 + rand() * 3) * 3600).to_i
       dt = Time.now + timeToSleep
       puts "Source thread sleeping until #{dt}"
       sleep(timeToSleep);
@@ -81,7 +81,7 @@ trimThread = Thread.new{
  	puts("Problem with trimming source. " + $!)
       end
     }
-    timeToSleep = ((4 + rand(4)) * 3600).to_i
+    timeToSleep = ((4 + rand() * 4) * 3600).to_i
     dt = Time.now + timeToSleep
     puts "Trim thread sleeping until #{dt}"
     sleep(timeToSleep);
@@ -100,7 +100,7 @@ postThread = Thread.new {
    end
   
    while(true)
-      timeToSleep = ((3 + rand(7)) * 3600).to_i
+      timeToSleep = ((3 + rand() * 7) * 3600).to_i
       dt = Time.now + timeToSleep
       puts "Post thread sleeping until #{dt}"
 	  
@@ -130,7 +130,7 @@ newsThread = Thread.new {
    puts "News thread started #{Time.now}"        
    
    while(true)
-      timeToSleep = (3 + rand(11)) * 3600).to_i
+      timeToSleep = ((3 + rand() * 11) * 3600).to_i
       dt = Time.now + timeToSleep
       puts "News thread sleeping until #{dt}"
       sleep(timeToSleep);
