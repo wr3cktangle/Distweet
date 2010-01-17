@@ -166,7 +166,6 @@ class SourceBuilder
      tudes = [":)",":(","?"]     
      
      repeat_counter = query_words.length / 2 if repeat_counter > query_words.length
-     #puts "Adding " + repeat_counter.to_s + " sets of tweets to the source."
      $stdout.flush
      
      repeat_counter.times do |x|     
@@ -187,6 +186,8 @@ class SourceBuilder
          tude.push(tudes[2])
        end
          
+       #perform a search, then remove words that begin with @ or # or contain http,rt,www,.com,ftp
+       # this is to try to avoid @ replying to random people and forwarding possible spam
        possible_source = String.new
        possible_source += SourceBuilder::build_source_search(query,tude)
        possible_a = possible_source.gsub(/[\r\n\t]/," ").strip.squeeze(" ").split(/ /)
@@ -200,15 +201,20 @@ class SourceBuilder
          f.close
        end
        
+       #don't be the cause of a fail whale. Twitter is fragile enough as is.
        if (x < repeat_counter - 1)
          sleep_time = rand(10) + 5
-         #puts "Sleeping for " + sleep_time.to_s + " seconds. " + Time.now.to_s
-         $stdout.flush
          sleep(sleep_time)
        end
     end     
   end
   
+  
+  #quick hack to keep the source size until control so that
+  # it stays kinda fresh while also not over stressing the
+  # dispress algorithm.
+  #Run a character dispress on the complete works of Shakespeare,
+  # you'll get the idea.
   def self.trim_source(source_file = '')
     lines = []
     the_file = source_file == '' ? @@SourceFile : source_file
@@ -245,9 +251,7 @@ class SourceBuilder
 end
 
 if __FILE__ == $0
-  #puts "Listing all commandline arguments"
   ARGV.each {|ar| print ar + " "}
-  #puts " "
   times_to_build = ARGV.length == 0 ?  (rand(10)+10) : ARGV[0].to_i 
   source_file = ARGV.length >= 2 ? ARGV[1] : ""
   output_file = ARGV.length >= 3 ? ARGV[2] : ""
